@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-05-30T20:46:18 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="test" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7d57de41-62bd-4578-aa5b-14605d2bbb4f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="remote mysql"/>
+	<queryString>
+		<![CDATA[select 
+       acc.title Title, 
+       acc.identifier, 
+       acc.content_description "Content Description", 
+       acc.accession_date "Accession Date",
+       ( SELECT value FROM archivesspace.enumeration_value where id = acc.acquisition_type_id) "Acquisition Type", 
+       ( SELECT value FROM archivesspace.enumeration_value where id = acc.resource_type_id) "Resource Type", 
+       acc.restrictions_apply "Restrictions Apply", 
+       acc.publish "Publish", 
+       acc.access_restrictions "Access Restrictions", 
+       acc.use_restrictions "Use Restrictions",
+       ud.string_1 "Mss Number", 
+       ud.string_2 "Location", 
+       ud.date_1 "Date Received" 
+from archivesspace.accession acc 
+inner join 
+      archivesspace.user_defined ud on ud.accession_id = acc.id ]]>
+	</queryString>
+	<field name="Title" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="identifier" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Content Description" class="java.lang.String"/>
+	<field name="Accession Date" class="java.sql.Date"/>
+	<field name="Acquisition Type" class="java.lang.String"/>
+	<field name="Resource Type" class="java.lang.String"/>
+	<field name="Restrictions Apply" class="java.lang.Integer"/>
+	<field name="Publish" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Access Restrictions" class="java.lang.Integer"/>
+	<field name="Use Restrictions" class="java.lang.Integer"/>
+	<field name="Mss Number" class="java.lang.String"/>
+	<field name="Location" class="java.lang.String"/>
+	<field name="Date Received" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" x="-20" y="0" width="595" height="79" uuid="a9c97493-a3f3-41ab-aaa6-331beb826169"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
