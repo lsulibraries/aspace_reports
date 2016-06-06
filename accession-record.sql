@@ -12,6 +12,7 @@ select
        acc.use_restrictions "Use Restrictions",
        ud.string_1 "Mss Number", 
        ud.string_2 "Location", 
+       ud.string_3 "SIRSI Number",
        ud.date_1 "Date Received" 
 from accession acc 
 inner join 
@@ -56,11 +57,16 @@ where e.accession_id = 95;
 
 --- Dates
 select 
-       d.expression Expression, 
-       (select value from enumeration_value where id = d.date_type_id) Type,
-       (select value from enumeration_value where id = d.label_id)  Label
-from date d
-where d.accession_id = 95;
+  np.sort_name agent, 
+  ac.address_1, 
+  ac.city, 
+  ac.region, 
+  ac.post_code,
+  (select value from enumeration_value where id = lar.role_id) role
+from linked_agents_rlshp lar 
+  join name_person np on lar.agent_person_id = np.id 
+  join agent_contact ac on lar.agent_person_id = ac.agent_person_id  
+where accession_id = 829\G
 
 /*
 +------------+--------+----------+
