@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-06-08T13:42:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Take3" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b302960a-5bca-4926-a7a8-041df7575d50">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Test ArchivesSpace Remote"/>
+	<queryString>
+		<![CDATA[select 
+      @num_elements := LENGTH(acc.identifier) - LENGTH(REPLACE(acc.identifier, '"', '')) AS num_elements,
+      SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 2), '"', -1) AS id1, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 4), '"', -1) AS id2,
+        IF(@num_elements > 4, SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 6), '"', -1), '') AS id3,
+        IF(@num_elements > 6, SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 8), '"', -1), '') AS id4,
+        acc.id,
+      acc.title Title, 
+      acc.repo_id,
+      acc.identifier, 
+      acc.content_description "Content Description", 
+      acc.accession_date "Accession Date",
+      ( SELECT value FROM enumeration_value where id = acc.acquisition_type_id) "Acquisition Type", 
+      ( SELECT value FROM enumeration_value where id = acc.resource_type_id) "Resource Type", 
+      acc.restrictions_apply "Restrictions Apply", 
+      acc.publish "Publish", 
+      acc.access_restrictions "Access Restrictions", 
+      acc.use_restrictions "Use Restrictions",
+      ud.string_1 "Mss Number", 
+      ud.string_2 "Location", 
+      ud.string_3 "SIRSI Number",
+      ud.date_1 "Date Received",
+      e.number Number, 
+      (select value from enumeration_value where id = e.extent_type_id) Type,
+      (select value from enumeration_value where id = e.portion_id)  Portion,
+      np.sort_name agent, 
+      ac.address_1, 
+      ac.city, 
+      ac.region, 
+      ac.post_code,
+      (select value from enumeration_value where id = lar.role_id) role,
+      (select ev.value from enumeration_value ev where ev.id = evt.event_type_id ) event_type, 
+      evt.created_by "Created By", 
+      evt.create_time "Date Created", 
+      evt.last_modified_by "Last Modified By", 
+      evt.user_mtime "Date modified"
+from accession acc 
+inner join 
+      user_defined ud on ud.accession_id = acc.id
+      join extent e on e.accession_id = acc.id
+      join linked_agents_rlshp lar on lar.accession_id = acc.id
+      join name_person np on lar.agent_person_id = np.id 
+      join agent_contact ac on lar.agent_person_id = ac.agent_person_id 
+      join event_link_rlshp elr on elr.accession_id = acc.id
+      join event evt on evt.id = elr.event_id 
+ where SUBSTRING_INDEX(SUBSTRING_INDEX(identifier, '"', 2), '"', -1) = 'Acc1997'
+    AND
+    SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 4), '"', -1) = '29'
+    LIMIT 1]]>
+	</queryString>
+	<field name="num_elements" class="java.lang.Long"/>
+	<field name="id1" class="java.lang.String"/>
+	<field name="id2" class="java.lang.String"/>
+	<field name="id3" class="java.lang.String"/>
+	<field name="id4" class="java.lang.String"/>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Title" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="repo_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="identifier" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Content Description" class="java.lang.String"/>
+	<field name="Accession Date" class="java.sql.Date"/>
+	<field name="Acquisition Type" class="java.lang.String"/>
+	<field name="Resource Type" class="java.lang.String"/>
+	<field name="Restrictions Apply" class="java.lang.Integer"/>
+	<field name="Publish" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Access Restrictions" class="java.lang.Integer"/>
+	<field name="Use Restrictions" class="java.lang.Integer"/>
+	<field name="Mss Number" class="java.lang.String"/>
+	<field name="Location" class="java.lang.String"/>
+	<field name="SIRSI Number" class="java.lang.String"/>
+	<field name="Date Received" class="java.sql.Date"/>
+	<field name="Number" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Type" class="java.lang.String"/>
+	<field name="Portion" class="java.lang.String"/>
+	<field name="agent" class="java.lang.String"/>
+	<field name="address_1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="city" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="region" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="post_code" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="role" class="java.lang.String"/>
+	<field name="event_type" class="java.lang.String"/>
+	<field name="Created By" class="java.lang.String"/>
+	<field name="Date Created" class="java.sql.Timestamp"/>
+	<field name="Last Modified By" class="java.lang.String"/>
+	<field name="Date modified" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="55" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="130" y="10" width="300" height="30" uuid="54f72602-6745-4e65-983c-6da87f257d4d">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Serif" size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="514" splitType="Stretch">
+			<textField>
+				<reportElement x="120" y="8" width="300" height="30" uuid="ccf61859-e95a-482d-97b6-426a614d6874">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Title}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="8" width="100" height="30" uuid="c2e35304-bcff-4651-8957-fe979f8df3c9"/>
+				<text><![CDATA[Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="38" width="100" height="30" uuid="8c568058-6f83-4e2d-b2bb-8930766a36b1"/>
+				<text><![CDATA[Identifier]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="70" width="100" height="30" uuid="fa181636-f636-4286-8286-657b4591cbfb"/>
+				<textFieldExpression><![CDATA[$F{Accession Date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="69" width="100" height="30" uuid="7a32d9d4-7ffc-4633-b714-c9f70674848a"/>
+				<text><![CDATA[Accession Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="99" width="100" height="30" uuid="161bdbc6-eeca-4131-9a33-7f4d00d9e40c"/>
+				<textFieldExpression><![CDATA[$F{Acquisition Type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="100" width="100" height="30" uuid="a30f0151-2b25-4c49-9f4b-dbb953b5376c"/>
+				<text><![CDATA[Acquisition Type]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="130" width="100" height="30" uuid="3e51a5d5-5820-45d9-ae26-0fc2e0a726cd"/>
+				<textFieldExpression><![CDATA[$F{Content Description}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="130" width="100" height="30" uuid="0a6fddab-c057-4491-92a3-6fa073ae96e1"/>
+				<text><![CDATA[Content Description]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="160" width="100" height="30" uuid="2ceef6c9-be6f-4b6e-8bbc-555338fd8e52"/>
+				<textFieldExpression><![CDATA[$F{Resource Type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="159" width="100" height="30" uuid="786bd890-ebf9-4892-bc84-3892c7a7aba0"/>
+				<text><![CDATA[Resource Type]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="189" width="100" height="30" uuid="9fc816dc-8c33-4971-ae8f-b1707471692a"/>
+				<textFieldExpression><![CDATA[$F{Restrictions Apply}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="189" width="100" height="30" uuid="5d179e50-42ed-4285-908f-c10e3071381d"/>
+				<text><![CDATA[Restrictions Apply]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="220" width="100" height="30" uuid="46cf5273-53a8-437d-bb25-c09570381a6a"/>
+				<textFieldExpression><![CDATA[$F{Date Received}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="220" width="100" height="30" uuid="bc69f042-2efb-405d-ba95-ca30b37ac985"/>
+				<text><![CDATA[Date Received]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="250" width="100" height="30" uuid="09d89391-5508-40a4-9607-65c37d65102a"/>
+				<textFieldExpression><![CDATA[$F{event_type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="280" width="100" height="30" uuid="066aa7dd-4d23-4e9a-b138-abb32f496f63"/>
+				<textFieldExpression><![CDATA[$F{Type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="250" width="100" height="30" uuid="bcc6d7e8-79d5-49e1-b256-78618e51851c"/>
+				<text><![CDATA[Events]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="279" width="100" height="30" uuid="c5a5903e-c28d-47e7-9d16-97f07758795b"/>
+				<text><![CDATA[Extents]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="280" width="100" height="30" uuid="96778347-7419-4159-9309-fcb49a35e909"/>
+				<textFieldExpression><![CDATA[$F{Number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="279" width="100" height="30" uuid="38703698-8477-47bd-84c5-6ed69ceb9e55"/>
+				<textFieldExpression><![CDATA[$F{Portion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="310" width="100" height="30" uuid="96981adf-ecfb-4fc8-a5c9-b248beb32ecc"/>
+				<textFieldExpression><![CDATA[$F{Location}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="310" width="100" height="30" uuid="985388f8-3a88-4d70-ae67-e899d7076415"/>
+				<text><![CDATA[Location]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="340" width="100" height="30" uuid="181a2dd4-1124-41bb-8fe8-1ff0be1499dd"/>
+				<textFieldExpression><![CDATA[$F{Mss Number}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="339" width="100" height="30" uuid="381b9ea8-a2cc-4449-94c8-04eb768669c4"/>
+				<text><![CDATA[Mss Number]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="370" width="100" height="30" uuid="46dd61aa-bfd0-49cb-8799-7b21ca57100b"/>
+				<textFieldExpression><![CDATA[$F{SIRSI Number}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="370" width="100" height="30" uuid="c9d6523d-fd97-4880-b170-0658be4918ac"/>
+				<text><![CDATA[SIRSI Number]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="400" width="100" height="30" uuid="3c6052ae-e7f2-487b-8210-ac075102dc52"/>
+				<textFieldExpression><![CDATA[$F{agent}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="400" width="100" height="30" uuid="5e0eca25-9f5e-40f9-a17a-0753c80c4d71"/>
+				<text><![CDATA[Agent]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="120" y="430" width="100" height="30" uuid="b1523166-9a5e-4cc1-bcc1-a6cf15d5cfec"/>
+				<textFieldExpression><![CDATA[$F{address_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="430" width="100" height="30" uuid="01c04bd4-9379-435a-9e58-92d41c95f470"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="220" y="430" width="100" height="30" uuid="31a8d3e8-0414-4f1d-a434-9a5d078980e2"/>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="320" y="430" width="40" height="30" uuid="a1fd067e-e6c1-44ca-a843-f9204bdfe2d6"/>
+				<textFieldExpression><![CDATA[$F{region}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="430" width="100" height="30" uuid="81cd224b-11b2-45e9-a66b-ad997aa044bf"/>
+				<textFieldExpression><![CDATA[$F{post_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="40" width="60" height="30" uuid="8e5234b3-7b1b-4658-94e6-b212655aace0"/>
+				<textFieldExpression><![CDATA[$F{id1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="40" width="40" height="30" uuid="a0c92137-0d77-4bce-88c4-00b38510ba52"/>
+				<textFieldExpression><![CDATA[$F{id2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="40" width="60" height="30" uuid="5fd8850c-be21-4074-ae39-d69c50a866ce"/>
+				<textFieldExpression><![CDATA[$F{id3}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
