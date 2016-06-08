@@ -119,7 +119,14 @@ where elr.accession_id = 95;
 --- ALL TOGETHER NOW...
 
 select 
+      @num_elements := LENGTH(acc.identifier) - LENGTH(REPLACE(acc.identifier, '"', '')) AS num_elements,
+      SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 2), '"', -1) AS id1, 
+        SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 4), '"', -1) AS id2,
+        IF(@num_elements > 4, SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 6), '"', -1), '') AS id3,
+        IF(@num_elements > 6, SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 8), '"', -1), '') AS id4,
+        acc.id,
       acc.title Title, 
+      acc.repo_id,
       acc.identifier, 
       acc.content_description "Content Description", 
       acc.accession_date "Accession Date",
@@ -157,4 +164,6 @@ inner join
       join agent_contact ac on lar.agent_person_id = ac.agent_person_id 
       join event_link_rlshp elr on elr.accession_id = acc.id
       join event evt on evt.id = elr.event_id 
-where acc.id = 95\G
+ where SUBSTRING_INDEX(SUBSTRING_INDEX(identifier, '"', 2), '"', -1) = 'Acc1997'
+    AND
+    SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 4), '"', -1) = '29'\G
