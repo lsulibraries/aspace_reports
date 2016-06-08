@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-06-08T13:42:21 -->
+<!-- 2016-06-08T14:47:54 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Take3" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b302960a-5bca-4926-a7a8-041df7575d50">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Test ArchivesSpace Remote"/>
+	<parameter name="acc1" class="java.lang.String"/>
+	<parameter name="acc2" class="java.lang.String"/>
+	<parameter name="acc3" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select 
       @num_elements := LENGTH(acc.identifier) - LENGTH(REPLACE(acc.identifier, '"', '')) AS num_elements,
@@ -50,9 +55,15 @@ inner join
       join agent_contact ac on lar.agent_person_id = ac.agent_person_id 
       join event_link_rlshp elr on elr.accession_id = acc.id
       join event evt on evt.id = elr.event_id 
- where SUBSTRING_INDEX(SUBSTRING_INDEX(identifier, '"', 2), '"', -1) = 'Acc1997'
+ where SUBSTRING_INDEX(SUBSTRING_INDEX(identifier, '"', 2), '"', -1) = $P{acc1}
     AND
-    SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 4), '"', -1) = '29'
+    SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 4), '"', -1) = $P{acc2}
+    AND
+        (
+            (LENGTH(acc.identifier) - LENGTH(REPLACE(acc.identifier, '"', ''))  = 4)
+            OR
+            (SUBSTRING_INDEX(SUBSTRING_INDEX(acc.identifier, '"', 6), '"', -1) = $P!{acc3})
+        )
     LIMIT 1]]>
 	</queryString>
 	<field name="num_elements" class="java.lang.Long"/>
